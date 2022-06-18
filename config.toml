@@ -1,0 +1,5 @@
+[file_storage]
+location="."
+
+[repository.golang]
+sumdb="sum.golang.org http://127.0.0.1:8080/repository/golang/sumdb"
