@@ -1,4 +1,4 @@
-package golang
+package golang_old
 
 import "github.com/goproxy/goproxy"
 

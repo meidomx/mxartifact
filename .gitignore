@@ -16,3 +16,6 @@
 
 # project files
 /.idea
+
+# test files
+/config.toml

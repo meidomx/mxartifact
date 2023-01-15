@@ -1,0 +1,14 @@
+[shared]
+debug=true
+
+[file_storage]
+location="data"
+
+[repository.shared.golang]
+
+[[repository.golang]]
+name="proxy_repo"
+type="proxy"
+base_url="/golang_proxy"
+http_proxy="http://localhost:1080"
+upstream_repository="https://goproxy.cn"

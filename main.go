@@ -3,17 +3,20 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/BurntSushi/toml"
-	"github.com/meidomx/config"
-	"github.com/meidomx/repository/golang"
 	"io"
+	"log"
 
+	"github.com/meidomx/mxartifact/config"
+	"github.com/meidomx/mxartifact/repository/gorepo"
+
+	"github.com/BurntSushi/toml"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/afero"
 )
 
 func main() {
 	fs := afero.NewOsFs()
-	f, err := fs.Open("config.toml")
+	f, err := fs.Open("config.toml.example")
 	if err != nil {
 		panic(errors.New(fmt.Sprint("open config.toml file error:", err)))
 	}
@@ -28,5 +31,10 @@ func main() {
 	}
 	var _ = f.Close()
 
-	golang.Init()
+	r := gin.Default()
+	gorepo.Init(r, cfg)
+	log.Println("starting service on :9051 ...")
+	if err := r.Run(":9051"); err != nil {
+		log.Fatalln("start failed:" + fmt.Sprint(err))
+	}
 }
