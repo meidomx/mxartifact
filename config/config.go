@@ -10,8 +10,9 @@ type Config struct {
 	} `toml:"repository"`
 
 	Shared struct {
-		Debug bool `toml:"debug"`
-	} `toml:"shared"`
+		Debug  bool   `toml:"debug"`
+		Listen string `toml:"listen"`
+	} `toml:"mxartifact"`
 }
 
 type GoRepoConf struct {
@@ -20,4 +21,6 @@ type GoRepoConf struct {
 	BaseUrl            string `toml:"base_url"`
 	HttpProxy          string `toml:"http_proxy"`
 	UpstreamRepository string `toml:"upstream_repository"`
+
+	ParentRepository string `toml:"parent_repository"`
 }

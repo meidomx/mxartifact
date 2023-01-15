@@ -17,5 +17,6 @@
 # project files
 /.idea
 
-# test files
+# test & data files
 /config.toml
+/data

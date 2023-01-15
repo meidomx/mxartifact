@@ -2,8 +2,10 @@ package gorepo
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/meidomx/mxartifact/config"
 
@@ -12,26 +14,47 @@ import (
 
 func Init(engine *gin.Engine, c *config.Config) {
 
+	repoMap := make(map[string]GoModuleRepository)
+
 	for _, v := range c.Repository.Golangs {
 		log.Printf("start golang repo [%s] on [%s]", v.Name, v.BaseUrl)
-		group := engine.Group(v.BaseUrl)
 
 		var client GoModuleRepository
 		switch v.Type {
 		case "proxy":
 			client = NewProxyRepo(v, c)
+		case "local":
+			pRepo, ok := repoMap[v.ParentRepository]
+			if !ok {
+				panic(errors.New("unknown parent repository:" + fmt.Sprint(v.ParentRepository)))
+			}
+			client = NewLocalCacheRepo(v, c, pRepo)
 		default:
 			panic("unknown repository type:" + v.Type)
 		}
 
+		if _, ok := repoMap[v.Name]; ok {
+			panic(errors.New("already have the GoModuleRepository with name:" + v.Name))
+		}
+		repoMap[v.Name] = client
+
+		group := engine.Group(v.BaseUrl)
 		group.GET("/*goquery", func(context *gin.Context) {
 			if c.Shared.Debug {
 				log.Println("go request:" + context.Param("goquery"))
 			}
 
-			//FIXME block access unknown uri including / , /favicon.ico , etc
+			// block access unknown uri including / , /favicon.ico , etc
+			pathType := extractPathType(context.Param("goquery"))
+			if len(pathType) <= 0 {
+				if c.Shared.Debug {
+					log.Println("unknown pathType for:" + context.Param("goquery"))
+				}
+				context.Status(http.StatusNotFound)
+				return
+			}
 
-			data, ct, err := client.FetchResource(context.Param("goquery"))
+			data, ct, err := client.FetchResource(context.Param("goquery"), pathType)
 			if err == ErrResourceNotFound {
 				context.Status(http.StatusNotFound)
 				return
@@ -51,6 +74,29 @@ func Init(engine *gin.Engine, c *config.Config) {
 		})
 	}
 
+}
+
+func extractPathType(param string) string {
+	if strings.HasSuffix(param, "/@v/list") {
+		return PathTypeListModule
+	} else if strings.HasSuffix(param, ".info") {
+		return PathTypeModuleMeta
+	} else if strings.HasSuffix(param, ".mod") {
+		return PathTypeModuleVersion
+	} else if strings.HasSuffix(param, ".zip") {
+		return PathTypeModuleContent
+	} else if strings.HasSuffix(param, "/@latest") {
+		return PathTypeModuleLatestVersion
+	} else if strings.HasPrefix(param, "/sumdb/") {
+		if strings.HasSuffix(param, "/supported") {
+			return PathTypeSumProxySupported
+		} else {
+			return PathTypeSumProxy
+		}
+	} else {
+		// unknown type
+		return ""
+	}
 }
 
 const (
@@ -77,7 +123,7 @@ var (
 
 type GoModuleRepository interface {
 	// FetchResource fetch uri data & content-type with error if failed
-	FetchResource(uri string) ([]byte, string, error)
+	FetchResource(uri string, pathType string) ([]byte, string, error)
 
 	SupportSumDBProxy(uri string) (bool, error)
 

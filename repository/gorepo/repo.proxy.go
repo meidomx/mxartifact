@@ -83,7 +83,7 @@ func (p *proxyRepo) decideErr(status int) error {
 	return errors.New("unknown http status:" + fmt.Sprint(status))
 }
 
-func (p *proxyRepo) FetchResource(uri string) ([]byte, string, error) {
+func (p *proxyRepo) FetchResource(uri string, pathType string) ([]byte, string, error) {
 	resourceUri := p.fullUpstreamUri(uri)
 	if p.debug {
 		log.Println("Fetch remote resource on: " + resourceUri + " with http_proxy=" + fmt.Sprint(len(p.HttpProxy) > 0))
@@ -104,7 +104,7 @@ func (p *proxyRepo) SupportSumDBProxy(uri string) (bool, error) {
 	}
 	if len(p.UpstreamRepo) > 0 {
 		// upstream repo mode
-		_, _, err := p.FetchResource(uri)
+		_, _, err := p.FetchResource(uri, PathTypeSumProxySupported)
 		if err != nil {
 			log.Println("sumdb unsupported reason:" + fmt.Sprint(err))
 			return false, nil
