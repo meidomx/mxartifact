@@ -34,25 +34,23 @@ func Init(engine *gin.Engine, c *config.Config) {
 			data, ct, err := client.FetchResource(context.Param("goquery"))
 			if err == ErrResourceNotFound {
 				context.Status(http.StatusNotFound)
+				return
 			} else if err == ErrResourceForbidden {
 				context.Status(http.StatusForbidden)
+				return
 			} else if err == ErrResourceClientError {
 				context.Status(http.StatusBadRequest)
+				return
 			} else if err == ErrResourceServerError || err != nil {
 				context.Status(http.StatusInternalServerError)
+				return
+			} else {
+				context.Data(http.StatusOK, ct, data)
+				return
 			}
-
-			context.Data(http.StatusOK, ct, data)
 		})
 	}
 
-}
-
-type Render struct {
-}
-
-type GinHandler struct {
-	Handler func(c *gin.Context) (*Render, error)
 }
 
 const (
@@ -66,21 +64,8 @@ const (
 	PathTypeSumProxySupported = "<proxyURL>/sumdb/<sumdb-name>/supported"
 )
 
-/**
-http status:
-200 - OK
-3xx - follow the redirects
-4xx and 5xx -errors
-e.g. 403 - prohibit visiting the specific package
-*/
-
 const (
-	//TODO memo for implementation
 	TriggerLoadAllVersionsAndLatestVersion = "PathTypeListModule,PathTypeModuleLatestVersion"
-	//TODO sumdb  https://go.googlesource.com/proposal/+/master/design/25530-sumdb.md#proxying-a-checksum-database
-	//TODO versions
-	//TODO VCS
-	//TODO other topics in go module document
 )
 
 var (

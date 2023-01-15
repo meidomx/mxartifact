@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/meidomx/mxartifact/config"
 
@@ -29,6 +30,8 @@ type proxyRepo struct {
 
 func NewProxyRepo(conf config.GoRepoConf, gc *config.Config) GoModuleRepository {
 	client := resty.New()
+
+	client.SetTimeout(10 * time.Second)
 
 	if len(conf.HttpProxy) > 0 {
 		client.SetProxy(conf.HttpProxy)
@@ -65,6 +68,7 @@ func (p *proxyRepo) fullUpstreamUri(uri string) string {
 }
 
 func (p *proxyRepo) decideErr(status int) error {
+	// for 3xx codes, they should be automatically followed by http client and well taken care
 	if 200 <= status && status <= 299 {
 		return nil
 	} else if status == 404 {
@@ -82,7 +86,7 @@ func (p *proxyRepo) decideErr(status int) error {
 func (p *proxyRepo) FetchResource(uri string) ([]byte, string, error) {
 	resourceUri := p.fullUpstreamUri(uri)
 	if p.debug {
-		log.Println("Fetch remote resource on:" + resourceUri)
+		log.Println("Fetch remote resource on: " + resourceUri + " with http_proxy=" + fmt.Sprint(len(p.HttpProxy) > 0))
 	}
 	res, err := p.client.R().Get(resourceUri)
 	if err != nil {

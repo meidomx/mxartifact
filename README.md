@@ -14,20 +14,19 @@ An opensource repository service.
 
 #### Features
 
-* [ ] Repository: Go Module
-* [ ] Repository - Go: upstream type: proxy server
-* [ ] Repository - Go: upstream type: L3/L4 proxy server
+* [x] Repository: Go Module
+* [x] Repository - Go: upstream type: proxy server
+* [x] Repository - Go: upstream type: L3/L4 proxy server
+* [ ] Upstream: http proxy support
 
 #### TODO List
 
 * [ ] Separate urls for different repositories
-* [ ] Repository: Go Module
 * [ ] Repository: Maven
 * [ ] Repository: Nuget
 * [ ] Repository: Cargo
 * [ ] Repository: Docker
 * [ ] Private repository: layered(nested and recursive) repositories, file permission(rw) on repository
-* [ ] Upstream: http proxy support
 * [ ] Repository: standard/proxy/layered repository
 * [ ] Upstream: Queuing
 * [ ] Repository - Go: simulating GOPRIVATE
@@ -56,4 +55,4 @@ An opensource repository service.
 ### Go
 
 [Go Module](https://go.dev/ref/mod)
-
+[Go Module Sumdb Proxy](https://go.googlesource.com/proposal/+/master/design/25530-sumdb.md#proxying-a-checksum-database)

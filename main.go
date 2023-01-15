@@ -16,7 +16,7 @@ import (
 
 func main() {
 	fs := afero.NewOsFs()
-	f, err := fs.Open("config.toml.example")
+	f, err := fs.Open("config.toml")
 	if err != nil {
 		panic(errors.New(fmt.Sprint("open config.toml file error:", err)))
 	}
