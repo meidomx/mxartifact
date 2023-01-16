@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/meidomx/mxartifact/config"
 
@@ -27,7 +26,10 @@ type mvnProxyRepo struct {
 func NewMvnProxyRepo(conf config.MavenRepoConf, c *config.Config) MavenRepository {
 	client := resty.New()
 
-	client.SetTimeout(10 * time.Second)
+	//FIXME should not use SetTimeout since this method limits the total time for the whole request
+	// This value may not be enough for huge files.
+	// Need find another way to detect and cut down conn/read timeout connection
+	//client.SetTimeout(10 * time.Second)
 
 	if len(conf.HttpProxy) > 0 {
 		client.SetProxy(conf.HttpProxy)
@@ -61,7 +63,7 @@ func (m *mvnProxyRepo) FetchResource(uri string) ([]byte, string, error) {
 func (m *mvnProxyRepo) MetaResource(uri string) (string, error) {
 	resourceUri := m.fullUpstreamUri(uri)
 	if m.debug {
-		log.Println("Fetch remote resource on: " + resourceUri + " with http_proxy=" + fmt.Sprint(len(m.HttpProxy) > 0))
+		log.Println("Fetch meta from remote resource on: " + resourceUri + " with http_proxy=" + fmt.Sprint(len(m.HttpProxy) > 0))
 	}
 	res, err := m.client.R().Head(resourceUri)
 	if err != nil {

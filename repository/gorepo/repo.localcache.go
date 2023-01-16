@@ -43,9 +43,9 @@ func (l *localCacheRepo) FetchResource(uri string, pathType string) ([]byte, str
 			return nil, "", err
 		} else {
 			var contentType string
-			if strings.HasSuffix(uri, ".zip") {
+			if strings.HasSuffix(strings.ToLower(uri), ".zip") {
 				contentType = "application/zip"
-			} else if strings.HasSuffix(uri, ".info") {
+			} else if strings.HasSuffix(strings.ToLower(uri), ".info") {
 				contentType = "application/json"
 			} else {
 				contentType = "text/plain; charset=utf-8"

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"strings"
-	"time"
 
 	"github.com/meidomx/mxartifact/config"
 
@@ -31,7 +30,10 @@ type proxyRepo struct {
 func NewProxyRepo(conf config.GoRepoConf, gc *config.Config) GoModuleRepository {
 	client := resty.New()
 
-	client.SetTimeout(10 * time.Second)
+	//FIXME should not use SetTimeout since this method limits the total time for the whole request
+	// This value may not be enough for huge files.
+	// Need find another way to detect and cut down conn/read timeout connection
+	//client.SetTimeout(10 * time.Second)
 
 	if len(conf.HttpProxy) > 0 {
 		client.SetProxy(conf.HttpProxy)

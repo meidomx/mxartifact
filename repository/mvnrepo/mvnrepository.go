@@ -2,6 +2,7 @@ package mvnrepo
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -27,6 +28,7 @@ var (
 
 const (
 	ContentTypeFilePom   = "text/xml"
+	ContentTypeFileXml   = "text/xml"
 	ContentTypeFileJar   = "application/java-archive"
 	ContentTypeFileOther = "text/plain"
 )
@@ -42,6 +44,12 @@ func Init(engine *gin.Engine, c *config.Config) {
 		switch v.Type {
 		case "proxy":
 			client = NewMvnProxyRepo(v, c)
+		case "local":
+			pRepo, ok := repoMap[v.ParentRepository]
+			if !ok {
+				panic(errors.New("unknown parent repository:" + fmt.Sprint(v.ParentRepository)))
+			}
+			client = NewMvnLocalCacheRepo(v, c, pRepo)
 		default:
 			panic("unknown repository type:" + v.Type)
 		}

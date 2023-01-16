@@ -24,8 +24,17 @@ base_url = "/golang"
 parent_repository = "proxy_repo"
 
 [[repository.maven]]
-name = "proxy_repo"
+name = "proxy_mvn_repo"
 type = "proxy"
-base_url = "/maven"
+base_url = "/proxy_maven"
 http_proxy = "http://localhost:1080"
 upstream_repository = "https://repo1.maven.org/maven2"
+
+[[repository.maven]]
+# This will also be the folder name in file storage
+name = "local_m2"
+type = "local"
+base_url = "/maven"
+#TODO currently repo reference should be declared in the order of the certain dependency
+parent_repository = "proxy_mvn_repo"
+

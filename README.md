@@ -32,8 +32,9 @@ The purpose of the project is to provide a simple and customizable artifact repo
 * [ ] Repository - Maven: auth and permissions
 * [ ] Repository - Maven: repository type - release / snapshot / etc.
 * [ ] Repository - Maven: local storage
-* [ ] Repository - Maven: deploy with auth - username & password
+* [ ] Repository - Maven: deploy with auth - username & password / other methods
 * [ ] Repository - Maven: metadata for deploying snapshots
+* [ ] Repository - Maven: Http Headers for GET/HEAD/PUT/POST/DELETE requests
 * [ ] Repository - Go: need extract request type before processing repositories & rely on the type
 * [ ] Repository - Go: support safe concurrent local storage
 * [ ] Repository - Go: simulating GOPRIVATE
@@ -50,6 +51,9 @@ The purpose of the project is to provide a simple and customizable artifact repo
 * [ ] Optimization: lightweight sidecar for distributed sync
 * [ ] Optimization: file cache and small file read
 * [ ] Web Management: web pages for management
+* [ ] File Storage: S3
+* [ ] File Storage: Multiple file storage
+* [ ] Debugging: more logs for troubleshooting
 
 ## 3. Dependency
 

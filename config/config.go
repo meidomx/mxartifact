@@ -32,4 +32,6 @@ type MavenRepoConf struct {
 	BaseUrl            string `toml:"base_url"`
 	HttpProxy          string `toml:"http_proxy"`
 	UpstreamRepository string `toml:"upstream_repository"`
+
+	ParentRepository string `toml:"parent_repository"`
 }
