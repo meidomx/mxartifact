@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net/http"
 
 	"github.com/meidomx/mxartifact/config"
 	"github.com/meidomx/mxartifact/repository/gorepo"
+	"github.com/meidomx/mxartifact/repository/mvnrepo"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
@@ -33,6 +35,10 @@ func main() {
 
 	r := gin.Default()
 	gorepo.Init(r, cfg)
+	mvnrepo.Init(r, cfg)
+	r.Any("/", func(context *gin.Context) {
+		context.Status(http.StatusNotFound)
+	})
 	log.Printf("starting service on %s ...", cfg.Shared.Listen)
 	if err := r.Run(cfg.Shared.Listen); err != nil {
 		log.Fatalln("start failed:" + fmt.Sprint(err))

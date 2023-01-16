@@ -59,6 +59,7 @@ func (l *localCacheRepo) FetchResource(uri string, pathType string) ([]byte, str
 		return nil, "", err
 	}
 
+	//FIXME should not record unexpected file
 	// cache file
 	folderPath := uri[0:strings.LastIndex(uri, "/")]
 	if err := l.fs.MkdirAll(folderPath, 0755); err != nil {

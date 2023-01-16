@@ -6,7 +6,8 @@ type Config struct {
 	} `toml:"file_storage"`
 
 	Repository struct {
-		Golangs []GoRepoConf `toml:"golang"`
+		Golangs []GoRepoConf    `toml:"golang"`
+		Mavens  []MavenRepoConf `toml:"maven"`
 	} `toml:"repository"`
 
 	Shared struct {
@@ -23,4 +24,12 @@ type GoRepoConf struct {
 	UpstreamRepository string `toml:"upstream_repository"`
 
 	ParentRepository string `toml:"parent_repository"`
+}
+
+type MavenRepoConf struct {
+	Name               string `toml:"name"`
+	Type               string `toml:"type"`
+	BaseUrl            string `toml:"base_url"`
+	HttpProxy          string `toml:"http_proxy"`
+	UpstreamRepository string `toml:"upstream_repository"`
 }

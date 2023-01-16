@@ -38,40 +38,42 @@ func Init(engine *gin.Engine, c *config.Config) {
 		}
 		repoMap[v.Name] = client
 
-		group := engine.Group(v.BaseUrl)
-		group.GET("/*goquery", func(context *gin.Context) {
-			if c.Shared.Debug {
-				log.Println("go request:" + context.Param("goquery"))
-			}
-
-			// block access unknown uri including / , /favicon.ico , etc
-			pathType := extractPathType(context.Param("goquery"))
-			if len(pathType) <= 0 {
+		if len(v.BaseUrl) > 0 {
+			group := engine.Group(v.BaseUrl)
+			group.GET("/*goquery", func(context *gin.Context) {
 				if c.Shared.Debug {
-					log.Println("unknown pathType for:" + context.Param("goquery"))
+					log.Println("go request:" + context.Param("goquery"))
 				}
-				context.Status(http.StatusNotFound)
-				return
-			}
 
-			data, ct, err := client.FetchResource(context.Param("goquery"), pathType)
-			if err == ErrResourceNotFound {
-				context.Status(http.StatusNotFound)
-				return
-			} else if err == ErrResourceForbidden {
-				context.Status(http.StatusForbidden)
-				return
-			} else if err == ErrResourceClientError {
-				context.Status(http.StatusBadRequest)
-				return
-			} else if err == ErrResourceServerError || err != nil {
-				context.Status(http.StatusInternalServerError)
-				return
-			} else {
-				context.Data(http.StatusOK, ct, data)
-				return
-			}
-		})
+				// block access unknown uri including / , /favicon.ico , etc
+				pathType := extractPathType(context.Param("goquery"))
+				if len(pathType) <= 0 {
+					if c.Shared.Debug {
+						log.Println("unknown pathType for:" + context.Param("goquery"))
+					}
+					context.Status(http.StatusNotFound)
+					return
+				}
+
+				data, ct, err := client.FetchResource(context.Param("goquery"), pathType)
+				if err == ErrResourceNotFound {
+					context.Status(http.StatusNotFound)
+					return
+				} else if err == ErrResourceForbidden {
+					context.Status(http.StatusForbidden)
+					return
+				} else if err == ErrResourceClientError {
+					context.Status(http.StatusBadRequest)
+					return
+				} else if err == ErrResourceServerError || err != nil {
+					context.Status(http.StatusInternalServerError)
+					return
+				} else {
+					context.Data(http.StatusOK, ct, data)
+					return
+				}
+			})
+		}
 	}
 
 }
