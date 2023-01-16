@@ -40,22 +40,22 @@ func Init(engine *gin.Engine, c *config.Config) {
 
 		if len(v.BaseUrl) > 0 {
 			group := engine.Group(v.BaseUrl)
-			group.GET("/*goquery", func(context *gin.Context) {
+			group.GET("/*query", func(context *gin.Context) {
 				if c.Shared.Debug {
-					log.Println("go request:" + context.Param("goquery"))
+					log.Println("go request:" + context.Param("query"))
 				}
 
 				// block access unknown uri including / , /favicon.ico , etc
-				pathType := extractPathType(context.Param("goquery"))
+				pathType := extractPathType(context.Param("query"))
 				if len(pathType) <= 0 {
 					if c.Shared.Debug {
-						log.Println("unknown pathType for:" + context.Param("goquery"))
+						log.Println("unknown pathType for:" + context.Param("query"))
 					}
 					context.Status(http.StatusNotFound)
 					return
 				}
 
-				data, ct, err := client.FetchResource(context.Param("goquery"), pathType)
+				data, ct, err := client.FetchResource(context.Param("query"), pathType)
 				if err == ErrResourceNotFound {
 					context.Status(http.StatusNotFound)
 					return

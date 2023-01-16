@@ -10,7 +10,8 @@ location = "data"
 [[repository.golang]]
 name = "proxy_repo"
 type = "proxy"
-base_url = "/golang_proxy"
+# Empty base_url will not expose the repository in http server
+#base_url = "/golang_proxy"
 http_proxy = "http://localhost:1080"
 upstream_repository = "https://proxy.golang.org"
 
