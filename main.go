@@ -3,6 +3,9 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/meidomx/mxartifact/repository/cargo"
+	"github.com/meidomx/mxartifact/repository/docker"
+	"github.com/meidomx/mxartifact/repository/nuget"
 	"io"
 	"log"
 
@@ -35,6 +38,9 @@ func main() {
 	r := gin.Default()
 	gorepo.Init(r, cfg)
 	mvnrepo.Init(r, cfg)
+	cargo.Init(r, cfg)
+	docker.Init(r, cfg)
+	nuget.Init(r, cfg)
 	log.Printf("starting service on %s ...", cfg.Shared.Listen)
 	if err := r.Run(cfg.Shared.Listen); err != nil {
 		log.Fatalln("start failed:" + fmt.Sprint(err))
