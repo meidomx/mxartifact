@@ -3,15 +3,15 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/meidomx/mxartifact/repository/cargo"
-	"github.com/meidomx/mxartifact/repository/docker"
-	"github.com/meidomx/mxartifact/repository/nuget"
 	"io"
 	"log"
 
 	"github.com/meidomx/mxartifact/config"
+	"github.com/meidomx/mxartifact/repository/cargo"
+	"github.com/meidomx/mxartifact/repository/docker"
 	"github.com/meidomx/mxartifact/repository/gorepo"
 	"github.com/meidomx/mxartifact/repository/mvnrepo"
+	"github.com/meidomx/mxartifact/repository/nuget"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
