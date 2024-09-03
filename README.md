@@ -21,13 +21,12 @@ The purpose of the project is to provide a simple and customizable artifact repo
 
 #### Prerequisite
 
-* Install `golang >= 1.19`
+* Install `golang >= 1.23`
 
 ## 2. TODO List
 
 * [ ] Repository: Nuget
 * [ ] Repository: Cargo
-* [ ] Repository: Docker
 * [ ] Upstream: Queuing
 * [ ] Repository - Maven: auth and permissions
 * [ ] Repository - Maven: repository type - release / snapshot / etc.
@@ -43,11 +42,19 @@ The purpose of the project is to provide a simple and customizable artifact repo
 * [ ] Repository - Go: Max file size defined in the Go Module specification
 * [ ] Repository - Go: support management for local persisted repositories including uploading/deleting files
 * [ ] Repository - Go: access token for pulling private repository
+* [ ] Repository - Docker: docker pull image support
+* [ ] Repository - Docker: support binding default http/https port and dispatching via hostname
+* [ ] Repository - Docker: Support user and permission management
+* [ ] Repository - Docker: Support local persistent
 * [ ] Repository: streaming transfer for large files in slow upstream env
 * [ ] Workflow support: Production/Pre published/Staged/Develop/Multiple environment isolation
 * [ ] Server: cluster and HA
+* [ ] Server: resource manager and reuse support including http listening addresses for multiplexing of docker and other
+  repository types
 * [ ] Security: ratelimiter
 * [ ] Security: max http header/body limit
+* [ ] Optimization: Support streaming file download - reduce resource cost, enable download progressbar support,
+  multi-layer simultaneously downloading
 * [ ] Optimization: lightweight sidecar for distributed sync
 * [ ] Optimization: file cache and small file read
 * [ ] Web Management: web pages for management
@@ -97,7 +104,8 @@ Reference implementations
 
 ### Docker
 
-[Docker registry](https://docs.docker.com/registry/spec/api/)
+* [Docker registry](https://docs.docker.com/registry/spec/api/)
+* [Open Container Initiative Distribution Specification v1.0.1](https://github.com/opencontainers/distribution-spec/blob/v1.0.1/spec.md)
 
 ### Maven
 

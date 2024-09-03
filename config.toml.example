@@ -1,6 +1,9 @@
 [mxartifact]
 debug = true
 listen = ":9051"
+listeners = [
+    { name = "docker_http", addresses = [":80", ":443"], options = { } },
+]
 
 [file_storage]
 location = "data"
@@ -38,3 +41,18 @@ base_url = "/maven"
 #TODO currently repo reference should be declared in the order of the certain dependency
 parent_repository = "proxy_mvn_repo"
 
+[[repository.docker]]
+name = "proxy_dockerhub_repo"
+type = "proxy"
+base_url = "/proxy_dockerhub"
+http_proxy = "http://localhost:1080"
+upstream_repository = "https://registry-1.docker.io"
+
+[[repository.docker]]
+name = "local_dockerhub_repo"
+type = "local"
+base_url = "/dockerhub"
+parent_repository = "proxy_dockerhub_repo"
+bind_listeners = [
+    { name = "docker_http", options = { hostname = "docker.io" } }
+]
