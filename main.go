@@ -12,6 +12,7 @@ import (
 	"github.com/meidomx/mxartifact/repository/gorepo"
 	"github.com/meidomx/mxartifact/repository/mvnrepo"
 	"github.com/meidomx/mxartifact/repository/nuget"
+	"github.com/meidomx/mxartifact/resource"
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
@@ -35,13 +36,20 @@ func main() {
 	}
 	var _ = f.Close()
 
+	rmgr := resource.NewResourceManager(cfg)
 	r := gin.Default()
 	gorepo.Init(r, cfg)
 	mvnrepo.Init(r, cfg)
 	cargo.Init(r, cfg)
-	docker.Init(r, cfg)
 	nuget.Init(r, cfg)
+	docker.Init(rmgr, cfg)
 	log.Printf("starting service on %s ...", cfg.Shared.Listen)
+	if err := rmgr.Startup(); err != nil {
+		if err := rmgr.Shutdown(); err != nil {
+			//FIXME log shutdown error
+		}
+		panic(err)
+	}
 	if err := r.Run(cfg.Shared.Listen); err != nil {
 		log.Fatalln("start failed:" + fmt.Sprint(err))
 	}

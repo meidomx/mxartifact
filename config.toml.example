@@ -44,9 +44,12 @@ parent_repository = "proxy_mvn_repo"
 [[repository.docker]]
 name = "proxy_dockerhub_repo"
 type = "proxy"
-base_url = "/proxy_dockerhub"
+base_url = "/"
 http_proxy = "http://localhost:1080"
-upstream_repository = "https://registry-1.docker.io"
+upstream_repository = "https://mirror.gcr.io"
+bind_listeners = [
+    { name = "docker_http", options = { hostname = "docker.io" } }
+]
 
 [[repository.docker]]
 name = "local_dockerhub_repo"
@@ -54,5 +57,5 @@ type = "local"
 base_url = "/dockerhub"
 parent_repository = "proxy_dockerhub_repo"
 bind_listeners = [
-    { name = "docker_http", options = { hostname = "docker.io" } }
+    { name = "docker_http", options = { hostname = "127.0.0.1" } }
 ]
