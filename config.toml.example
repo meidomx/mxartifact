@@ -2,7 +2,7 @@
 debug = true
 listen = ":9051"
 listeners = [
-    { name = "docker_http", addresses = [":80", ":443"], options = { } },
+    { name = "docker_http", addresses = [":80"], options = { } },
 ]
 
 [file_storage]
@@ -42,13 +42,63 @@ base_url = "/maven"
 parent_repository = "proxy_mvn_repo"
 
 [[repository.docker]]
-name = "proxy_dockerhub_repo"
+name = "proxy_docker_dockerhub"
 type = "proxy"
 base_url = "/"
-http_proxy = "http://localhost:1080"
+http_proxy = "http://10.11.0.20:1080"
 upstream_repository = "https://mirror.gcr.io"
 bind_listeners = [
-    { name = "docker_http", options = { hostname = "docker.io" } }
+    { name = "docker_http", options = { hostname = "docker.registry.internal" } }
+]
+
+[[repository.docker]]
+name = "proxy_docker_gcr"
+type = "proxy"
+base_url = "/"
+http_proxy = "http://10.11.0.20:1080"
+upstream_repository = "https://gcr.io"
+bind_listeners = [
+    { name = "docker_http", options = { hostname = "gcr.registry.internal" } }
+]
+
+[[repository.docker]]
+name = "proxy_docker_k8sgcr"
+type = "proxy"
+base_url = "/"
+http_proxy = "http://10.11.0.20:1080"
+upstream_repository = "https://k8s.gcr.io"
+bind_listeners = [
+    { name = "docker_http", options = { hostname = "k8sgcr.registry.internal" } }
+]
+
+[[repository.docker]]
+name = "proxy_docker_ghcr"
+type = "proxy"
+base_url = "/"
+http_proxy = "http://10.11.0.20:1080"
+upstream_repository = "https://ghcr.io"
+bind_listeners = [
+    { name = "docker_http", options = { hostname = "ghcr.registry.internal" } }
+]
+
+[[repository.docker]]
+name = "proxy_docker_quay"
+type = "proxy"
+base_url = "/"
+http_proxy = "http://10.11.0.20:1080"
+upstream_repository = "https://quay.io"
+bind_listeners = [
+    { name = "docker_http", options = { hostname = "quay.registry.internal" } }
+]
+
+[[repository.docker]]
+name = "proxy_docker_k8sregistry"
+type = "proxy"
+base_url = "/"
+http_proxy = "http://10.11.0.20:1080"
+upstream_repository = "https://registry.k8s.io"
+bind_listeners = [
+    { name = "docker_http", options = { hostname = "k8sregistry.registry.internal" } }
 ]
 
 [[repository.docker]]
