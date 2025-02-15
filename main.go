@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 
 	"github.com/meidomx/mxartifact/config"
 	"github.com/meidomx/mxartifact/repository/cargo"
@@ -16,12 +17,10 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/afero"
 )
 
 func main() {
-	fs := afero.NewOsFs()
-	f, err := fs.Open("config.toml")
+	f, err := os.Open("config.toml")
 	if err != nil {
 		panic(errors.New(fmt.Sprint("open config.toml file error:", err)))
 	}

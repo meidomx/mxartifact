@@ -74,7 +74,9 @@ The purpose of the project is to provide a simple and customizable artifact repo
 * [ ] Repository - Docker: Support local persistent
 * [ ] Repository - Docker: special handling of tag: latest
 * [ ] Repository - Docker: OCI Distribution Spec version: v1.1.0 & Docker image manifest version 2, schema 2
+* [ ] Repository - Docker: replicate image to another registry
 * [ ] Repository: streaming transfer for large files in slow upstream env
+* [ ] Repository: helm, apt
 * [ ] Workflow support: Production/Pre published/Staged/Develop/Multiple environment isolation
 * [ ] Server: cluster and HA
 * [ ] Server: resource manager and reuse support including http listening addresses for multiplexing of docker and other

@@ -41,7 +41,7 @@ func Init(engine *resource.ResourceManager, c *config.Config) {
 			continue
 		} else if docker.Type == "proxy" {
 			// initialize docker repository
-			var repo DockerRepository = NewProxiedDockerRepository(docker.HttpProxy, docker.UpstreamRepository)
+			var repo DockerRepository = NewProxiedDockerRepository(docker.HttpProxy, docker.UpstreamRepository, c.Shared.Debug)
 
 			// register listener
 			if len(docker.BindListeners) > 0 {
@@ -68,7 +68,7 @@ func Init(engine *resource.ResourceManager, c *config.Config) {
 						}
 						// api: end-1
 						if dockerUri == "/v2/" {
-							w.WriteHeader(http.StatusOK)
+							repo.HandlerRootPath()(w, r)
 							return
 						}
 						// pull image operations
